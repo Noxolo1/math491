@@ -1,1 +1,1 @@
-# math491---Thesis
+repo for math 491 - Senior Thesis 
