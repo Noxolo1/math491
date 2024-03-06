@@ -1,5 +1,4 @@
 %%% FORNBERGS METHOD %%%
-
 function [f,s,erri] = fornintsp_2(n,itmax,x,y)
 % Fornberg's method for interior regions from B. Fornberg, A numerical
 % method for conformal mappings, SIAM J. Sci. Stat. Comput., 1 (1980)
@@ -133,14 +132,14 @@ end
 % Error =max(abs(etat-etas))
 
 % Plot the real and imaginary parts of f(s)
-figure;
-subplot(2,1,1);
-plot(s, real(f), 'b', s, imag(f), 'r');
-xlabel('Parameter s');
-ylabel('Real and Imaginary Parts');
-title('Real and Imaginary Parts of f(s)');
-legend('Real(f(s))', 'Imag(f(s))');
-grid on;
+% figure;
+% subplot(2,1,1);
+% plot(s, real(f), 'b', s, imag(f), 'r');
+% xlabel('Parameter s');
+% ylabel('Real and Imaginary Parts');
+% title('Real and Imaginary Parts of f(s)');
+% legend('Real(f(s))', 'Imag(f(s))');
+% grid on;
 
 % Plot the magnitude and phase of f(s)
 % subplot(2,1,2);
@@ -152,31 +151,170 @@ grid on;
 % grid on;
 
 % Plot the boundary curve
-figure;
-plot(x, y, 'k');
-xlabel('x');
-ylabel('y');
-title('Boundary Curve');
-axis equal;
-grid on;
+% figure;
+% plot(x, y, 'k');
+% xlabel('x');
+% ylabel('y');
+% title('Boundary Curve');
+% axis equal;
+% grid on;
 
 
-% Define parameters of the ellipse
+%%% Boundary Curve of Ellipse %%%
 a = 2; % Semi-major axis length
 b = 1; % Semi-minor axis length
 theta = linspace(0, 2*pi, 100); % Angles for parameterization
 
-% Parametric equations for an ellipse centered at the origin in the complex plane
-z = a * exp(1i * theta); % Complex representation of the ellipse
+% Parametric equations for an ellipse centered at the origin
+x = a * cos(theta); % x-coordinate
+y = b * sin(theta); % y-coordinate
 
-% Assign the real and imaginary parts to x and y
-x = real(z);
-y = imag(z);
+% Plot the ellipse
+figure;
+plot(x, y, 'LineWidth', 1.5);
+xlabel('x');
+ylabel('y');
+title('Ellipse');
+axis equal;
+grid on;
+%%% End Ellipse %%%
 
 % Call the fornintsp2 function with the ellipse coordinates
-n = 1000; % Number of Fourier points
+n = 256; % Number of Fourier points
 itmax = 10; % Number of iterations
 [f, s, erri] = fornintsp_2(n, itmax, x, y);
 
 disp(f);
 
+
+%%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
+coefficients = f
+
+% Plot real and imaginary parts on the same graph
+figure;
+hold on;
+plot(real(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Real Part');
+plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part');
+hold off;
+xlabel('Coefficient Index');
+ylabel('Value');
+title('Real and Imaginary Parts of Taylor Coefficients');
+legend;
+grid on;
+%%% end plotting Taylor coefficients %%%
+
+
+
+%%% Boundary Curve for Inverted Ellipse %%%
+% Define the parameter alpha (0 < alpha < 1)
+alpha = 0.5; % Adjust alpha as needed
+
+% Define the range of parameter values S
+S = linspace(0, 2*pi, 1000); % You can adjust the number of points (1000 here)
+
+% Calculate rho(S)
+rho = sqrt(1 - (1 - alpha^2) * sin(S).^2);
+
+% Calculate x(S) and y(S) using polar coordinates
+x = rho .* cos(S);
+y = rho .* sin(S);
+
+% Plot the boundary curve
+figure;
+plot(x, y, 'b', 'LineWidth', 1.5);
+xlabel('x');
+ylabel('y');
+title('Boundary Curve for Inverted Ellipse');
+axis equal;
+grid on;
+%%% End inverted ellipse %%%
+
+
+
+
+%%%% Boundary Curve for Cassini Ovals %%%%
+% Define the parameterized function for ρ(σ) and γ(σ)
+rho = @(sigma, alpha) 1 ./ sqrt(2) .* sqrt((1 - alpha^2) .* cos(2 * sigma) + sqrt((1 - alpha^2)^2 .* cos(2 * sigma).^2 + 4 * alpha));
+
+% Define the range of sigma
+sigma = linspace(0, 2*pi, 1000);
+
+% Define the value of alpha (adjust as needed)
+alpha = 0.01; % Change this value as needed
+
+% Compute the corresponding points on the boundary curve
+boundary_points = rho(sigma, alpha) .* exp(1i * sigma);
+
+% Plot the boundary curve
+figure;
+plot(real(boundary_points), imag(boundary_points), 'LineWidth', 1.5);
+xlabel('Re');
+ylabel('Im');
+title('Boundary Curve for Cassini Oval');
+axis equal;
+grid on;
+%%% End cassini ovals %%%
+
+%%% multiple cassini ovals graphed on top of each other %%%
+% Define the parameterized function for ρ(σ) and γ(σ)
+rho = @(sigma, alpha) 1 ./ sqrt(2) .* sqrt((1 - alpha^2) .* cos(2 * sigma) + sqrt((1 - alpha^2)^2 .* cos(2 * sigma).^2 + 4 * alpha));
+
+% Define the range of sigma
+sigma = linspace(0, 2*pi, 1000);
+
+% Define the alpha values
+alpha_values = [0.01, 0.1, 0.2, 0.3, 0.4]; % Adjust the alpha values as needed
+
+% Initialize the plot
+figure;
+hold on;
+
+% Loop over each alpha value
+for i = 1:length(alpha_values)
+    alpha = alpha_values(i);
+
+    % Compute the corresponding points on the boundary curve
+    boundary_points = rho(sigma, alpha) .* exp(1i * sigma);
+
+    % Plot the boundary curve for the current alpha value
+    plot(real(boundary_points), imag(boundary_points), 'LineWidth', 1.5);
+end
+
+hold off;
+
+% Add labels and title
+xlabel('Re');
+ylabel('Im');
+title('Boundary Curves for Cassini Ovals with Different Alpha Values');
+axis equal;
+grid on;
+legend(cellstr(num2str(alpha_values', 'Alpha = %0.2f')));
+%%% end multiple cassini ovals
+
+
+%%% meshgrid example %%%
+clear
+clc
+N = 41;
+t = linspace(0, 2*pi, N);
+r = linspace(0.5, 2.5, N);
+[R,T] = meshgrid(r,t);
+
+Z = R.*exp(T*1i);
+
+f = Z; %Original mesh
+%f = conj(Z) + 0.4*Z.^2; %Transformed mesh
+
+U = real(f);
+V = imag(f);
+
+%Plot mesh
+hold off
+plot(U,V,'b-');
+hold on
+plot(U',V','r-');
+
+xlim([-5,5]);
+ylim([-5,5]);
+axis equal
+%%% end meshgrid example %%%
