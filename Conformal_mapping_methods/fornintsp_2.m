@@ -159,27 +159,24 @@ end
 % axis equal;
 % grid on;
 
+%%% Boundary Curve Circle %%%
+% Define the range of parameter values
+theta = linspace(0, 2*pi, 1000);
 
-%%% Boundary Curve of Ellipse %%%
-a = 2; % Semi-major axis length
-b = 1; % Semi-minor axis length
-theta = linspace(0, 2*pi, 100); % Angles for parameterization
+% Calculate x and y coordinates of the unit circle
+x = 2* cos(theta);
+y = 2* sin(theta);
 
-% Parametric equations for an ellipse centered at the origin
-x = a * cos(theta); % x-coordinate
-y = b * sin(theta); % y-coordinate
-
-% Plot the ellipse
+% Plot the unit circle in the complex plane
 figure;
-plot(x, y, 'LineWidth', 1.5);
-xlabel('x');
-ylabel('y');
-title('Ellipse');
+plot(x, y, 'b', 'LineWidth', 1.5);
+xlabel('Re');
+ylabel('Im');
+title('Unit Circle in the Complex Plane');
 axis equal;
 grid on;
-%%% End Ellipse %%%
 
-% Call the fornintsp2 function with the ellipse coordinates
+% Call the fornintsp2 function with the circle coordinates
 n = 256; % Number of Fourier points
 itmax = 10; % Number of iterations
 [f, s, erri] = fornintsp_2(n, itmax, x, y);
@@ -203,11 +200,77 @@ legend;
 grid on;
 %%% end plotting Taylor coefficients %%%
 
+%%% polar plot of coefficients %%%
+% Generate 256 complex Taylor coefficients
+% Convert complex coefficients to polar coordinates
+magnitudes = abs(coefficients);
+phases = angle(coefficients);
+
+% Plot the polar plot
+polar(phases, magnitudes, 'o'); % Plot polar plot
+title('Polar Plot of Complex Taylor Coefficients');
+
+
+
+%%% Boundary Curve of Ellipse %%%
+a = 2; % Semi-major axis length
+b = 1; % Semi-minor axis length
+theta = linspace(0, 2*pi, 100); % Angles for parameterization
+
+% Parametric equations for an ellipse centered at the origin
+Re = a * cos(theta); % x-coordinate
+Im = b * sin(theta); % y-coordinate
+
+% Plot the ellipse
+figure;
+plot(Re, Im, 'LineWidth', 1.5);
+xlabel('Re');
+ylabel('Im');
+title('Ellipse');
+axis equal;
+grid on;
+%%% End Ellipse %%%
+
+% Call the fornintsp2 function with the ellipse coordinates
+n = 256; % Number of Fourier points
+itmax = 10; % Number of iterations
+[f, s, erri] = fornintsp_2(n, itmax, Re, Im);
+
+disp(f);
+
+
+%%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
+coefficients = f
+
+% Plot real and imaginary parts on the same graph
+figure;
+hold on;
+plot(real(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Real Part');
+plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part');
+hold off;
+xlabel('Coefficient Index');
+ylabel('Value');
+title('Real and Imaginary Parts of Taylor Coefficients');
+legend;
+grid on;
+%%% end plotting Taylor coefficients %%%
+
+%%% polar plot of coefficients %%%
+% Generate 256 complex Taylor coefficients
+% Convert complex coefficients to polar coordinates
+magnitudes = abs(coefficients);
+phases = angle(coefficients);
+
+% Plot the polar plot
+polar(phases, magnitudes, 'o'); % Plot polar plot
+title('Polar Plot of Complex Taylor Coefficients');
+
+
 
 
 %%% Boundary Curve for Inverted Ellipse %%%
 % Define the parameter alpha (0 < alpha < 1)
-alpha = 0.5; % Adjust alpha as needed
+alpha = 0.4; % Adjust alpha as needed
 
 % Define the range of parameter values S
 S = linspace(0, 2*pi, 1000); % You can adjust the number of points (1000 here)
@@ -222,12 +285,44 @@ y = rho .* sin(S);
 % Plot the boundary curve
 figure;
 plot(x, y, 'b', 'LineWidth', 1.5);
-xlabel('x');
-ylabel('y');
+xlabel('Re');
+ylabel('Im');
 title('Boundary Curve for Inverted Ellipse');
 axis equal;
 grid on;
 %%% End inverted ellipse %%%
+
+% Call the fornintsp2 function with the inverted ellipse coordinates
+n = 256; % Number of Fourier points
+itmax = 10; % Number of iterations
+[f, s, erri] = fornintsp_2(n, itmax, x, y);
+
+disp(f);
+
+%%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
+coefficients = f
+
+% Plot real and imaginary parts on the same graph
+figure;
+hold on;
+plot(real(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Real Part');
+plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part');
+hold off;
+xlabel('Coefficient Index');
+ylabel('Value');
+title('Real and Imaginary Parts of Taylor Coefficients');
+legend;
+grid on;
+%%% end plotting Taylor coefficients %%%
+
+% Convert complex coefficients to polar coordinates
+magnitudes = abs(f);
+phases = angle(f);
+
+% Plot the polar plot of the Taylor coefficients
+figure;
+polar(phases, magnitudes, 'o');
+title('Polar Plot of Taylor Coefficients');
 
 
 
@@ -254,6 +349,36 @@ title('Boundary Curve for Cassini Oval');
 axis equal;
 grid on;
 %%% End cassini ovals %%%
+
+% Call the fornintsp2 function with the cassini ovals coordinates
+n = 256; % Number of Fourier points
+itmax = 10; % Number of iterations
+[f, s, erri] = fornintsp_2(n, itmax, real(boundary_points), imag(boundary_points));
+
+%%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
+coefficients = f;
+
+% Plot real and imaginary parts on the same graph
+figure;
+hold on;
+plot(real(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Real Part');
+plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part');
+hold off;
+xlabel('Coefficient Index');
+ylabel('Value');
+title('Real and Imaginary Parts of Taylor Coefficients');
+legend;
+grid on;
+%%% end plotting Taylor coefficients %%%
+
+% Convert complex coefficients to polar coordinates
+magnitudes = abs(f);
+phases = angle(f);
+
+% Plot the polar plot of the Taylor coefficients
+figure;
+polar(phases, magnitudes, 'o');
+title('Polar Plot of Taylor Coefficients');
 
 %%% multiple cassini ovals graphed on top of each other %%%
 % Define the parameterized function for ρ(σ) and γ(σ)
