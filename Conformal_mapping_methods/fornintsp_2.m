@@ -108,27 +108,27 @@ fder = ppval(ppdx,s) + i*ppval(ppdy,s);
 end
 
 % projection method - Wegmann survey p. 390
-N = 512; alpha=.8; iter = 4000; t = 2*pi*[0:N-1]/N; S = t;
-eta = @(S) cos(S) + i*alpha*sin(S);
-eta_dot = @(S) -sin(S) + i*alpha*cos(S);
-for k=1:iter
-  etas=eta(S);
-  B = fft(etas)/N;
-  Bn = [2*B(1) i*imag(B(2)) zeros(1,N/2-1) i*imag(B(N/2+2)) 2*B(N/2+3:N)];
-  gk = ifft(Bn);
-  etad = eta_dot(S);
-  U = - real(gk./etad);
-  norm(U,inf)
-  S = S + U;
-end
-  etas = eta(S);
-  B = fft(etas)/N;
-  Bp = [0 real(B(2)) B(3:N/2+1) real(B(N/2+2)) zeros(1,N/2-2)];
-  etat = eta(t);
-  plot(etas,'.')
-  hold on;
-  plot(etat,'x');
-  axis equal
+%N = 512; alpha=.8; iter = 4000; t = 2*pi*[0:N-1]/N; S = t;
+%eta = @(S) cos(S) + i*alpha*sin(S);
+%eta_dot = @(S) -sin(S) + i*alpha*cos(S);
+%for k=1:iter
+%  etas=eta(S);
+%  B = fft(etas)/N;
+%  Bn = [2*B(1) i*imag(B(2)) zeros(1,N/2-1) i*imag(B(N/2+2)) 2*B(N/2+3:N)];
+%  gk = ifft(Bn);
+%  etad = eta_dot(S);
+%  U = - real(gk./etad);
+%  norm(U,inf)
+%  S = S + U;
+%end
+%  etas = eta(S);
+%  B = fft(etas)/N;
+%  Bp = [0 real(B(2)) B(3:N/2+1) real(B(N/2+2)) zeros(1,N/2-2)];
+%  etat = eta(t);
+%  plot(etas,'.')
+%  hold on;
+%  plot(etat,'x');
+%  axis equal
 % Error =max(abs(etat-etas))
 
 % Plot the real and imaginary parts of f(s)
@@ -164,15 +164,15 @@ end
 theta = linspace(0, 2*pi, 1000);
 
 % Calculate x and y coordinates of the unit circle
-x = 2* cos(theta);
-y = 2* sin(theta);
+x = cos(theta);
+y = sin(theta);
 
 % Plot the unit circle in the complex plane
 figure;
 plot(x, y, 'b', 'LineWidth', 1.5);
 xlabel('Re');
 ylabel('Im');
-title('Unit Circle in the Complex Plane');
+title('Unit Circle');
 axis equal;
 grid on;
 
@@ -184,7 +184,7 @@ itmax = 10; % Number of iterations
 disp(f);
 
 
-%%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
+%%% Plotting computed coefficients of resulting function f from fornberg method %%%
 coefficients = f
 
 % Plot real and imaginary parts on the same graph
@@ -195,20 +195,20 @@ plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part'
 hold off;
 xlabel('Coefficient Index');
 ylabel('Value');
-title('Real and Imaginary Parts of Taylor Coefficients');
+title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
-%%% end plotting Taylor coefficients %%%
+%%% end plotting computed coefficients %%%
 
 %%% polar plot of coefficients %%%
-% Generate 256 complex Taylor coefficients
+% Generate 256 complex computed coefficients
 % Convert complex coefficients to polar coordinates
 magnitudes = abs(coefficients);
 phases = angle(coefficients);
 
-% Plot the polar plot
+% Plot the polar plot of the Computed Boundary
 polar(phases, magnitudes, 'o'); % Plot polar plot
-title('Polar Plot of Complex Taylor Coefficients');
+title("Polar Plot of Computed Boundary");
 
 
 
@@ -239,7 +239,7 @@ itmax = 10; % Number of iterations
 disp(f);
 
 
-%%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
+%%% Plotting coefficients of resulting function f from fornberg method %%%
 coefficients = f
 
 % Plot real and imaginary parts on the same graph
@@ -250,20 +250,20 @@ plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part'
 hold off;
 xlabel('Coefficient Index');
 ylabel('Value');
-title('Real and Imaginary Parts of Taylor Coefficients');
+title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
-%%% end plotting Taylor coefficients %%%
+%%% end plotting coefficients %%%
 
 %%% polar plot of coefficients %%%
-% Generate 256 complex Taylor coefficients
+% Generate 256 complex coefficients
 % Convert complex coefficients to polar coordinates
 magnitudes = abs(coefficients);
 phases = angle(coefficients);
 
-% Plot the polar plot
+% Plot the polar plot of the Computed Boundary
 polar(phases, magnitudes, 'o'); % Plot polar plot
-title('Polar Plot of Complex Taylor Coefficients');
+title("Polar Plot of Computed Boundary");
 
 
 
@@ -287,7 +287,7 @@ figure;
 plot(x, y, 'b', 'LineWidth', 1.5);
 xlabel('Re');
 ylabel('Im');
-title('Boundary Curve for Inverted Ellipse');
+title('Inverted Ellipse');
 axis equal;
 grid on;
 %%% End inverted ellipse %%%
@@ -295,11 +295,11 @@ grid on;
 % Call the fornintsp2 function with the inverted ellipse coordinates
 n = 256; % Number of Fourier points
 itmax = 10; % Number of iterations
-[f, s, erri] = fornintsp_2(n, itmax, x, y);
+[f, s, erri] = f25ornintsp_2(n, itmax, x, y);
 
 disp(f);
 
-%%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
+%%% Plotting coefficients of resulting function f from fornberg method %%%
 coefficients = f
 
 % Plot real and imaginary parts on the same graph
@@ -310,45 +310,81 @@ plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part'
 hold off;
 xlabel('Coefficient Index');
 ylabel('Value');
-title('Real and Imaginary Parts of Taylor Coefficients');
+title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
-%%% end plotting Taylor coefficients %%%
+%%% end plotting coefficients %%%
 
 % Convert complex coefficients to polar coordinates
 magnitudes = abs(f);
 phases = angle(f);
 
-% Plot the polar plot of the Taylor coefficients
+% Plot the polar plot of the Computed Boundary
 figure;
 polar(phases, magnitudes, 'o');
-title('Polar Plot of Taylor Coefficients');
+title("Polar Plot of Computed Boundary");
 
 
 
 
 %%%% Boundary Curve for Cassini Ovals %%%%
 % Define the parameterized function for ρ(σ) and γ(σ)
+%rho = @(sigma, alpha) 1 ./ sqrt(2) .* sqrt((1 - alpha^2) .* cos(2 * sigma) + sqrt((1 - alpha^2)^2 .* cos(2 * sigma).^2 + 4 * alpha));
+
+% Define the range of sigma
+%sigma = linspace(0, 2*pi, 1000);
+
+% Define the value of alpha (adjust as needed)
+%alpha = 0.01; % Change this value as needed
+
+% Compute the corresponding points on the boundary curve
+%boundary_points = rho(sigma, alpha) .* exp(1i * sigma);
+
+% Plot the boundary curve
+%figure;
+%plot(real(boundary_points), imag(boundary_points), 'LineWidth', 1.5);
+%xlabel('Re');
+%ylabel('Im');
+%title('Boundary Curve for Cassini Oval');
+%axis equal;
+%grid on;
+%%% End cassini ovals %%%
+
+%%% cassini ovals graphed on top of each other %%%
+% Define the parameterized function for ρ(σ) and γ(σ)
 rho = @(sigma, alpha) 1 ./ sqrt(2) .* sqrt((1 - alpha^2) .* cos(2 * sigma) + sqrt((1 - alpha^2)^2 .* cos(2 * sigma).^2 + 4 * alpha));
 
 % Define the range of sigma
 sigma = linspace(0, 2*pi, 1000);
 
-% Define the value of alpha (adjust as needed)
-alpha = 0.01; % Change this value as needed
+% Define the alpha values
+alpha_values = [0.0001]; % Adjust the alpha values as needed
 
-% Compute the corresponding points on the boundary curve
-boundary_points = rho(sigma, alpha) .* exp(1i * sigma);
-
-% Plot the boundary curve
+% Initialize the plot
 figure;
-plot(real(boundary_points), imag(boundary_points), 'LineWidth', 1.5);
+hold on;
+
+% Loop over each alpha value
+for i = 1:length(alpha_values)
+    alpha = alpha_values(i);
+
+    % Compute the corresponding points on the boundary curve
+    boundary_points = rho(sigma, alpha) .* exp(1i * sigma);
+
+    % Plot the boundary curve for the current alpha value
+    plot(real(boundary_points), imag(boundary_points), 'LineWidth', 1.5);
+end
+
+%hold off;
+
+% Add labels and title
 xlabel('Re');
 ylabel('Im');
 title('Boundary Curve for Cassini Oval');
 axis equal;
 grid on;
-%%% End cassini ovals %%%
+legend(cellstr(num2str(alpha_values', 'Alpha = 0.0001')));
+%%% end multiple cassini ovals
 
 % Call the fornintsp2 function with the cassini ovals coordinates
 n = 256; % Number of Fourier points
@@ -366,80 +402,19 @@ plot(imag(coefficients), '-o', 'LineWidth', 1.5, 'DisplayName', 'Imaginary Part'
 hold off;
 xlabel('Coefficient Index');
 ylabel('Value');
-title('Real and Imaginary Parts of Taylor Coefficients');
+title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
-%%% end plotting Taylor coefficients %%%
+%%% end plotting coefficients %%%
 
 % Convert complex coefficients to polar coordinates
 magnitudes = abs(f);
 phases = angle(f);
 
-% Plot the polar plot of the Taylor coefficients
+% Plot the polar plot of the Computed Boundary
 figure;
 polar(phases, magnitudes, 'o');
-title('Polar Plot of Taylor Coefficients');
-
-%%% multiple cassini ovals graphed on top of each other %%%
-% Define the parameterized function for ρ(σ) and γ(σ)
-rho = @(sigma, alpha) 1 ./ sqrt(2) .* sqrt((1 - alpha^2) .* cos(2 * sigma) + sqrt((1 - alpha^2)^2 .* cos(2 * sigma).^2 + 4 * alpha));
-
-% Define the range of sigma
-sigma = linspace(0, 2*pi, 1000);
-
-% Define the alpha values
-alpha_values = [0.01, 0.1, 0.2, 0.3, 0.4]; % Adjust the alpha values as needed
-
-% Initialize the plot
-figure;
-hold on;
-
-% Loop over each alpha value
-for i = 1:length(alpha_values)
-    alpha = alpha_values(i);
-
-    % Compute the corresponding points on the boundary curve
-    boundary_points = rho(sigma, alpha) .* exp(1i * sigma);
-
-    % Plot the boundary curve for the current alpha value
-    plot(real(boundary_points), imag(boundary_points), 'LineWidth', 1.5);
-end
-
-hold off;
-
-% Add labels and title
-xlabel('Re');
-ylabel('Im');
-title('Boundary Curves for Cassini Ovals with Different Alpha Values');
-axis equal;
-grid on;
-legend(cellstr(num2str(alpha_values', 'Alpha = %0.2f')));
-%%% end multiple cassini ovals
+title("Polar Plot of Computed Boundary");
 
 
-%%% meshgrid example %%%
-clear
-clc
-N = 41;
-t = linspace(0, 2*pi, N);
-r = linspace(0.5, 2.5, N);
-[R,T] = meshgrid(r,t);
 
-Z = R.*exp(T*1i);
-
-f = Z; %Original mesh
-%f = conj(Z) + 0.4*Z.^2; %Transformed mesh
-
-U = real(f);
-V = imag(f);
-
-%Plot mesh
-hold off
-plot(U,V,'b-');
-hold on
-plot(U',V','r-');
-
-xlim([-5,5]);
-ylim([-5,5]);
-axis equal
-%%% end meshgrid example %%%
