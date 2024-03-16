@@ -181,11 +181,12 @@ n = 256; % Number of Fourier points
 itmax = 10; % Number of iterations
 [f, s, erri] = fornintsp_2(n, itmax, x, y);
 
-disp(f);
-
+%disp(f);
+%disp(s);
 
 %%% Plotting computed coefficients of resulting function f from fornberg method %%%
 coefficients = f
+bp = s
 
 % Plot real and imaginary parts on the same graph
 figure;
@@ -199,6 +200,15 @@ title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
 %%% end plotting computed coefficients %%%
+
+% Plot bp
+figure;
+plot(bp, '-o', 'LineWidth', 1.5, 'MarkerSize', 4);
+xlabel('Index');
+ylabel('Real Part');
+title('Parameterized Points');
+grid on;
+%%% end plotting bp %%%
 
 %%% polar plot of coefficients %%%
 % Generate 256 complex computed coefficients
@@ -241,6 +251,7 @@ disp(f);
 
 %%% Plotting coefficients of resulting function f from fornberg method %%%
 coefficients = f
+bp = s
 
 % Plot real and imaginary parts on the same graph
 figure;
@@ -254,6 +265,15 @@ title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
 %%% end plotting coefficients %%%
+
+% Plot bp
+figure;
+plot(bp, '-o', 'LineWidth', 1.5, 'MarkerSize', 4);
+xlabel('Index');
+ylabel('Real Part');
+title('Parameterized Points');
+grid on;
+%%% end plotting bp %%%
 
 %%% polar plot of coefficients %%%
 % Generate 256 complex coefficients
@@ -295,12 +315,13 @@ grid on;
 % Call the fornintsp2 function with the inverted ellipse coordinates
 n = 256; % Number of Fourier points
 itmax = 10; % Number of iterations
-[f, s, erri] = f25ornintsp_2(n, itmax, x, y);
+[f, s, erri] = fornintsp_2(n, itmax, x, y);
 
 disp(f);
 
 %%% Plotting coefficients of resulting function f from fornberg method %%%
 coefficients = f
+bp = s
 
 % Plot real and imaginary parts on the same graph
 figure;
@@ -314,6 +335,15 @@ title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
 %%% end plotting coefficients %%%
+
+% Plot bp
+figure;
+plot(bp, '-o', 'LineWidth', 1.5, 'MarkerSize', 4);
+xlabel('Index');
+ylabel('Real Part');
+title('Parameterized Points');
+grid on;
+%%% end plotting bp %%%
 
 % Convert complex coefficients to polar coordinates
 magnitudes = abs(f);
@@ -393,6 +423,7 @@ itmax = 10; % Number of iterations
 
 %%% Plotting Taylor coefficients of resulting function f from fornberg method %%%
 coefficients = f;
+bp = s
 
 % Plot real and imaginary parts on the same graph
 figure;
@@ -406,6 +437,15 @@ title('Real and Imaginary Parts of Computed Boundary Coefficients');
 legend;
 grid on;
 %%% end plotting coefficients %%%
+
+% Plot bp
+figure;
+plot(bp, '-o', 'LineWidth', 1.5, 'MarkerSize', 4);
+xlabel('Index');
+ylabel('Real Part');
+title('Parameterized Points');
+grid on;
+%%% end plotting bp %%%
 
 % Convert complex coefficients to polar coordinates
 magnitudes = abs(f);
